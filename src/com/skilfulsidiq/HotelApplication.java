@@ -1,8 +1,8 @@
 package com.skilfulsidiq;
 
-public class Main {
-
+public class HotelApplication {
+    
     public static void main(String[] args) {
-	// write your code here
+        MainMenu.runMainMenu();
     }
 }
