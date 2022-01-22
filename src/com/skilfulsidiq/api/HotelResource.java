@@ -45,4 +45,11 @@ public class HotelResource {
     public Collection<IRoom> findARoom(Date checkIn, Date checkOut){
        return reservationService.findARooms(checkIn, checkOut);
     }
+
+    public Collection<IRoom> findRecommendedRooms(final Date checkIn, final Date checkOut) {
+        return reservationService.displayRecommendedRoom(checkIn, checkOut);
+    }
+    public Date addMoreDays(Date date){
+        return reservationService.addDaysToDate(date);
+    }
 }

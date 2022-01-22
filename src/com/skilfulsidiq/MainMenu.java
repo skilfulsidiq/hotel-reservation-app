@@ -80,8 +80,25 @@ public class MainMenu extends Menu {
         if(checkIn != null && checkOut != null){
             Collection<IRoom> openRooms = hotelResource.findARoom(checkIn, checkOut);
             if(openRooms.isEmpty()){
-                System.out.println("No available room ");
-                runMainMenu();
+                Collection<IRoom> alternativeRooms = hotelResource.findRecommendedRooms(checkIn, checkOut);
+
+                if (alternativeRooms.isEmpty()) {
+                    System.out.println("No rooms found.");
+                } else {
+                    final Date alternativeCheckIn = hotelResource.addMoreDays(checkIn);
+                    final Date alternativeCheckOut = hotelResource.addMoreDays(checkOut);
+
+                    System.out.println("The following are rooms available on recommended date");
+                    System.out.println("Check-In Date:" + alternativeCheckIn);
+                    System.out.println("Check-Out Date:" + alternativeCheckOut);
+
+                    printAvailableRoom(alternativeRooms);
+                    processRoomReservation(scanner, alternativeCheckIn, alternativeCheckOut, alternativeRooms);
+                }
+
+
+                // System.out.println("No available room ");
+                // runMainMenu();
             }else{
                 printAvailableRoom(openRooms);
                 processRoomReservation(scanner, checkIn, checkOut, openRooms);
@@ -120,7 +137,7 @@ public class MainMenu extends Menu {
                 }
             }else{
                 System.out.println("Please, create an account.");
-                runMainMenu();
+                createAccount();
             }
 
         }else{

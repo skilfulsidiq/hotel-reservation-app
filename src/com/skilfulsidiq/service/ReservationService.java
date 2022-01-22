@@ -30,15 +30,34 @@ public class ReservationService {
         Collection<Reservation> allReservation = showAllReservation();
         Collection<IRoom> bookedRooms = new ArrayList<>();
         for(Reservation reservation: allReservation){
-            if(checkOutDate.after(reservation.getCheckInDate()) && checkInDate.before(reservation.getCheckOutDate())){
+            if(checkForOpenDate(reservation,checkInDate,checkOutDate)){
                 bookedRooms.add(reservation.getRoom());
+
+                
             }
             
            
         }
         return rooms.values().stream().filter(room -> bookedRooms.stream()
-                                           .noneMatch( booked ->bookedRooms.equals(room)))
+                                           .noneMatch( booked ->booked.equals(room)))
                                            .collect(Collectors.toList());
+    }
+    boolean  checkForOpenDate(Reservation reservation,Date checkInDate,
+    Date checkOutDate){
+        return checkInDate.before(reservation.getCheckOutDate())
+        && checkOutDate.after(reservation.getCheckInDate());
+    }
+
+    public Collection<IRoom> displayRecommendedRoom(final Date checkInDate, final Date checkOutDate) {
+        return findAvailableRooms(addDaysToDate(checkInDate), addDaysToDate(checkOutDate));
+    }
+
+    public Date addDaysToDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, 10);
+        return calendar.getTime();
+
     }
 
     public Reservation reserveARoom(Customer customer,IRoom room,Date checkInDate, Date checkOutDate){
